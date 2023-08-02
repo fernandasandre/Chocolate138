@@ -1,6 +1,4 @@
 package apitest;
-
-
 import com.google.gson.Gson;
 import entities.AccountEntity;
 import io.restassured.response.Response;
@@ -18,12 +16,11 @@ public class Account {
     String uri = "https://bookstore.toolsqa.com/Account/v1/";
     Response resp;
     String token;
+    AccountEntity account = new AccountEntity();
     @Test(priority = 1)
     public void testCreateUser(){
 
-
-        AccountEntity account = new AccountEntity();
-        account.userName = "charlie0041";
+        account.userName = "charlie0049";
         account.password = "P@ss0rd1";
 
         jsonBody = gson.toJson(account);
@@ -70,5 +67,51 @@ public class Account {
         Assert.assertTrue(token.length()!= 0);
 
     }
+
+    @Test(priority = 3)
+    public void testAuthorized(){
+        given()
+                .contentType(ct)
+                .log().all()
+                .body(jsonBody)
+        .when()
+                .post(uri +"Authorized")
+        .then()
+                .log().all()
+                .statusCode(200)
+                ;
+    }
+
+    @Test(priority = 4)
+    public void testResearchUserNotAuthorized(){
+        given()
+                .contentType(ct)
+                .log().all()
+        .when()
+                .get(uri + "User/" + userId)
+        .then()
+                .log().all()
+                .statusCode(401)
+                .body("code", is("1200"))
+                .body("message", is("User not authorized!"))
+                ;
+    }
+    @Test(priority = 5)
+    public void testResearchUser(){
+        given()
+                .contentType(ct)
+                .log().all()
+                .header("Authorization", "Bearer " + token)
+        .when()
+                .get(uri + "User/" + userId)
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("username", is(account.userName))
+                .body("userId", is(userId))
+
+        ;
+    }
+
 
 }
