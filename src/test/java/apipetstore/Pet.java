@@ -11,22 +11,25 @@ import io.restassured.http.ContentType;
 
 import java.util.ArrayList;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class Pet {
 
-    private static final String BASE_URL = "https://petstore.swagger.io/v2";
-
-    @Test
+    private static final String BASE_URL = "https://petstore.swagger.io/v2/";
+    String jsonBody;
+    PetEntity pet = new PetEntity();
+    @Test(priority = 0)
     public void testCreatePet() {
         Gson gson = new Gson();
 
-        PetEntity pet = new PetEntity();
+
         pet.category = new CategoryEntity();
         pet.tags = new ArrayList<>();
         pet.photoUrls = new ArrayList<>();
 
-        pet.id = 0;
+        pet.id = 999;
         pet.name = "doggie";
         pet.status = "available";
         pet.photoUrls.add("www.photos.com.br");
@@ -41,11 +44,11 @@ public class Pet {
         String requestBody = gson.toJson(pet);
 
 
-        Response resp = (Response) RestAssured.given()
+        Response resp = (Response) given()
                 .contentType(ContentType.JSON)
                 .body(requestBody).log().all()
             .when()
-                .post(BASE_URL + "/pet")
+                .post(BASE_URL + "pet")
             .then()
                 .statusCode(200)
                 .body("name", equalTo("doggie")).log().all()
@@ -53,6 +56,18 @@ public class Pet {
                 .extract()
                 ;
 
-        ;
+    }
+    @Test(priority = 1)
+    public void getPet(){
+        given()
+                .contentType("application/json")
+                .log().all()
+        .when()
+                .get(BASE_URL + "pet/" + pet.id)
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("id", is(999))
+                ;
     }
 }
