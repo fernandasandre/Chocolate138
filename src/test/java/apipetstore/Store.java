@@ -1,17 +1,10 @@
 package apipetstore;
 
 import com.google.gson.Gson;
-import entities.CategoryEntity;
-import entities.PetEntity;
 import entities.StoreEntity;
-import entities.TagEntity;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 
@@ -23,7 +16,6 @@ public class Store {
     public void testCreateStore() {
         Gson gson = new Gson();
 
-
         store.id = 3;
         store.petId = 9;
         store.quantity = 1;
@@ -31,9 +23,7 @@ public class Store {
         store.status = "placed";
         store.complete = true;
 
-
         String requestBody = gson.toJson(store);
-
 
         Response resp = (Response) given()
                 .contentType(ContentType.JSON)

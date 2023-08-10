@@ -20,11 +20,10 @@ public class Account {
     @Test(priority = 1)
     public void testCreateUser(){
 
-        account.userName = "charlie0049";
+        account.userName = "charlie0053";
         account.password = "P@ss0rd1";
 
         jsonBody = gson.toJson(account);
-
 
         resp = (Response) given()
                 .contentType(ct)
@@ -109,9 +108,22 @@ public class Account {
                 .statusCode(200)
                 .body("username", is(account.userName))
                 .body("userId", is(userId))
-
         ;
     }
 
+    @Test(priority = 6)
+    public void testDeleteUserAuthorized(){
+        given()
+                .contentType(ct)
+                .log().all()
+                .header("Authorization", "Bearer " + token)
+        .when()
+                .delete(uri + "User/" + userId)
+        .then()
+                .log().all()
+                .statusCode(204)
+        ;
+
+    }
 
 }

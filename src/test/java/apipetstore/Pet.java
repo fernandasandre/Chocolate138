@@ -6,11 +6,8 @@ import entities.PetEntity;
 import entities.TagEntity;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-
 import java.util.ArrayList;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -29,7 +26,7 @@ public class Pet {
         pet.tags = new ArrayList<>();
         pet.photoUrls = new ArrayList<>();
 
-        pet.id = 999;
+        pet.id = 997;
         pet.name = "doggie";
         pet.status = "available";
         pet.photoUrls.add("www.photos.com.br");
@@ -67,7 +64,7 @@ public class Pet {
         .then()
                 .log().all()
                 .statusCode(200)
-                .body("id", is(999))
+                .body("id", is(997))
                 ;
     }
 }
