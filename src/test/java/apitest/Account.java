@@ -15,7 +15,7 @@ public class Account {
     String jsonBody;
     String uri = "https://bookstore.toolsqa.com/Account/v1/";
     Response resp;
-    String token;
+    static String token;
     AccountEntity account = new AccountEntity();
     @Test(priority = 1)
     public void testCreateUser(){
@@ -112,7 +112,7 @@ public class Account {
     }
 
     @Test(priority = 6)
-    public void testDeleteUserAuthorized(){
+    public void testDeleteUser(){
         given()
                 .contentType(ct)
                 .log().all()

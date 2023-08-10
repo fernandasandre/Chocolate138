@@ -67,4 +67,17 @@ public class Pet {
                 .body("id", is(997))
                 ;
     }
+
+    @Test(priority = 2)
+    public void deletePet(){
+        given()
+                .contentType("application/json")
+                .log().all()
+        .when()
+                .delete(BASE_URL + "pet/" + pet.id)
+        .then()
+                .log().all()
+                .statusCode(200)
+                ;
+    }
 }

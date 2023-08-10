@@ -12,6 +12,7 @@ public class Store {
 
     private static final String BASE_URL = "https://petstore.swagger.io/v2/store/order";
     StoreEntity store = new StoreEntity();
+    int orderId;
     @Test(priority = 0)
     public void testCreateStore() {
         Gson gson = new Gson();
@@ -35,11 +36,13 @@ public class Store {
                 .statusCode(200)
                 .body("petId", equalTo(9))
                 .body("quantity", equalTo(1))
-                .body("shipDate", equalTo("2023-07-21T17:54:11.207+0000"))
                 .body("status", equalTo("placed"))
                 .body("complete", equalTo(true))
-                .extract()
-                ;
+                .body("id", equalTo(3))
+                .extract();
+        orderId = resp.jsonPath().getInt("id");
+        System.out.println("id extraido: " + orderId);
+
 
         }
     @Test(priority = 1)
@@ -48,13 +51,29 @@ public class Store {
                 .contentType("application/json")
                 .log().all()
         .when()
-                .get(BASE_URL +"/" + store.petId)
+                .get(BASE_URL + "/" + orderId)
         .then()
                 .log().all()
                 .statusCode(200)
-                .body("petId", equalTo(3))
+                .body("petId", equalTo(9))
                 .body("status", equalTo("placed"))
-                .body("complete", equalTo(false))
+                .body("complete", equalTo(true))
+
+                ;
+
+
+    }
+
+    @Test(priority = 2)
+    public void deleteStoreOrder(){
+        given()
+                .contentType("Application/json")
+                .log().all()
+        .when()
+                .delete(BASE_URL + "/" + orderId)
+        .then()
+                .log().all()
+                .statusCode(200)
                 ;
 
     }
