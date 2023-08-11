@@ -4,6 +4,7 @@ import entities.AccountEntity;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.ITestContext;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
@@ -20,7 +21,7 @@ public class Account {
     @Test(priority = 1)
     public void testCreateUser(){
 
-        account.userName = "charlie0053";
+        account.userName = "charlie0054";
         account.password = "P@ss0rd1";
 
         jsonBody = gson.toJson(account);
@@ -44,7 +45,7 @@ public class Account {
     }
 
     @Test(priority = 2)
-    public void testGenereteToken(){
+    public void testGenerateToken(ITestContext context){
 
         resp = (Response) given()
                 .contentType(ct)
@@ -61,6 +62,7 @@ public class Account {
         ;
 
         token = resp.jsonPath().getString("token");
+        context.setAttribute("token", token);
         System.out.println("O token: "+ token);
 
         Assert.assertTrue(token.length()!= 0);
