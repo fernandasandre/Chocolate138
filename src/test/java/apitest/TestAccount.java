@@ -8,7 +8,7 @@ import org.testng.ITestContext;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
-public class Account {
+public class TestAccount {
 
     Gson gson = new Gson();
     String userId;
@@ -19,7 +19,7 @@ public class Account {
     static String token;
     AccountEntity account = new AccountEntity();
     @Test(priority = 1)
-    public void testCreateUser(){
+    public void testCreateUser(ITestContext context){
 
         account.userName = "charlie0054";
         account.password = "P@ss0rd1";
@@ -41,6 +41,7 @@ public class Account {
         ;
 
         userId = resp.jsonPath().getString("userID");
+        context.setAttribute("userID", userId);
         System.out.println("UserID extraido: " + userId);
     }
 
