@@ -2,11 +2,10 @@ package apitest;
 
 import com.google.gson.Gson;
 import entities.LoanEntity;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.testng.ITestContext;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.hamcrest.Matchers.is;
 
 public class TestBookStore {
@@ -17,13 +16,13 @@ public class TestBookStore {
     LoanEntity isbn = new LoanEntity();
     Gson gson = new Gson();
 
-    @BeforeMethod
+    @BeforeClass
     public void setUP(ITestContext context){
         account.testCreateUser(context);
         account.testGenerateToken(context);
     }
 
-    @AfterMethod
+    @AfterClass
     public void tearDown(){
         account.testDeleteUser();
     }
@@ -62,6 +61,28 @@ public class TestBookStore {
                 .body("isbn", is(isbn.isbn))
                 ;
 
+    }
+
+    @Test(priority = 3)
+    public void testUpdateLoan(ITestContext context){
+        String isbnOld = "9781449325862";
+        String isbnNew = "9781449331818";
+        isbn = new LoanEntity();
+        isbn.userId = context.getAttribute("userID").toString();
+        isbn.isbn = isbnNew;
+
+        given()
+                .log().all()
+                .contentType(ct)
+                .header("Authorization", "Bearer "+ context.getAttribute("token"))
+                .body(gson.toJson(isbn))
+        .when()
+                .put(uri + "Books/" + isbnOld)
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("books[0].isbn", is(isbnNew))
+                ;
     }
 
 }
