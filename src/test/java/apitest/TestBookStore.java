@@ -23,7 +23,7 @@ public class TestBookStore {
     }
 
     @AfterClass
-    public void tearDown(){
+        public void tearDown(){
         account.testDeleteUser();
     }
 
@@ -82,6 +82,21 @@ public class TestBookStore {
                 .log().all()
                 .statusCode(200)
                 .body("books[0].isbn", is(isbnNew))
+                ;
+    }
+
+    @Test(priority = 4)
+    public void testDeleteLoans(ITestContext context){
+
+        given()
+                .log().all()
+                .contentType(ct)
+                .header("Authorization", "Bearer " + context.getAttribute("token"))
+        .when()
+                .delete(uri + "Books?UserId=" + context.getAttribute("userID"))
+        .then()
+                .log().all()
+                .statusCode(204)
                 ;
     }
 
