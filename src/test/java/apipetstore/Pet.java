@@ -48,8 +48,9 @@ public class Pet {
                 .post(BASE_URL + "pet")
             .then()
                 .statusCode(200)
-                .body("name", equalTo("doggie")).log().all()
-                .body("status", equalTo("available")).log().all()
+                .log().all()
+                .body("name", equalTo("doggie"))
+                .body("status", equalTo("available"))
                 .extract()
                 ;
 
@@ -69,6 +70,41 @@ public class Pet {
     }
 
     @Test(priority = 2)
+    public void putPet(){
+
+        String updatePetJson = "{\n" +
+                "  \"id\": 0,\n" +
+                "  \"category\": {\n" +
+                "    \"id\": 0,\n" +
+                "    \"name\": \"string\"\n" +
+                "  },\n" +
+                "  \"name\": \"updated_Doguinho\",\n" +
+                "  \"photoUrls\": [\n" +
+                "    \"string\"\n" +
+                "  ],\n" +
+                "  \"tags\": [\n" +
+                "    {\n" +
+                "      \"id\": 0,\n" +
+                "      \"name\": \"string\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"status\": \"available\"\n" +
+                "}";
+
+        given()
+                .contentType("application/json")
+                .body(updatePetJson)
+                .log().all()
+        .when()
+                .put(BASE_URL + "pet")
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("name", equalTo("updated_Doguinho"))
+                ;
+    }
+
+    @Test(priority = 3)
     public void deletePet(){
         given()
                 .contentType("application/json")

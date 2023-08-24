@@ -15,23 +15,10 @@ public class User {
     @Test(priority = 0)
     public void testCreateUser() {
         Gson gson = new Gson();
-        
-        //UserEntity user = new UserEntity();
-        //user.id = 0;
-        //user.username = "charlie036";
-        //user.firstName = "Charlie";
-        //user.lastName = "Brown";
-        //user.email = "charlie@brown.com.br";
-        //user.password = "123456";
-        //user.phone = "1122223333";
-        //user.userStatus = 0;
-
-        //String requestBody = gson.toJson(user);
-
         String requestBody = "[\n" +
                 "  {\n" +
                 "    \"id\": 0,\n" +
-                "    \"username\": \"Fernanda00125\",\n" +
+                "    \"username\": \"Fernanda00129\",\n" +
                 "    \"firstName\": \"Fernanda\",\n" +
                 "    \"lastName\": \"teste\",\n" +
                 "    \"email\": \"fernanda@teste.com\",\n" +
@@ -61,11 +48,11 @@ public class User {
                 .contentType("application/json")
                 .log().all()
         .when()
-                .get(BASE_URL + "Fernanda00125")
+                .get(BASE_URL + "Fernanda00129")
         .then()
                 .log().all()
                 .statusCode(200)
-                .body("username", is("Fernanda00125"))
+                .body("username", is("Fernanda00129"))
                 .body("firstName", is("Fernanda"))
                 .body("lastName", is("teste"))
                 .body("email", is("fernanda@teste.com"))
@@ -74,13 +61,39 @@ public class User {
                 ;
 
     }
+
     @Test(priority = 2)
+    public void updateUser(){
+        String updatedUserJson = "{\n" +
+                "  \"id\": 0,\n" +
+                "  \"username\": \"Fernanda00129\",\n" +
+                "  \"firstName\": \"FernandaTeste\",\n" +
+                "  \"lastName\": \"FernandaUpdated\",\n" +
+                "  \"email\": \"fernanda@teste.com\",\n" +
+                "  \"password\": \"123456@\",\n" +
+                "  \"phone\": \"2222-2222\",\n" +
+                "  \"userStatus\": 1\n" +
+                "}";
+
+        given()
+                .contentType("application/json")
+                .body(updatedUserJson)
+                .log().all()
+        .when()
+                .put(BASE_URL + "Fernanda00129")
+        .then()
+                .statusCode(200)
+                ;
+
+    }
+
+    @Test(priority = 3)
     public void deleteUser(){
         given()
                 .contentType("application/json")
                 .log().all()
         .when()
-                .delete(BASE_URL + "Fernanda00125")
+                .delete(BASE_URL + "Fernanda00129")
         .then()
                 .statusCode(200)
                 ;
