@@ -16,6 +16,10 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.33")
     implementation("org.seleniumhq.selenium:selenium-java:4.10.0")
     implementation("io.github.bonigarcia:webdrivermanager:5.4.0")
+    implementation("io.cucumber:cucumber-java:7.13.0")
+    implementation("io.cucumber:cucumber-testng:7.13.0")
+
+
 }
 
 tasks.test {
